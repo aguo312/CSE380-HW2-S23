@@ -45,4 +45,4 @@ import LaserShaderType from "./hw2/shaders/LaserShaderType";
 
     // Start our game
     game.start(MainMenu, {});
-})();
+})() ;
