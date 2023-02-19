@@ -736,7 +736,14 @@ export default class HW2Scene extends Scene {
 	 */
 	public handleBubblePlayerCollisions(): number {
 		// TODO check for collisions between the player and the bubbles
-        return;
+		let collisions = 0;
+		for (let bubble of this.bubbles) {
+			if (bubble.visible && HW2Scene.checkAABBtoCircleCollision(this.player.collisionShape.getBoundingRect(), bubble.collisionShape.getBoundingCircle())) {
+				// event
+				collisions += 1;
+			}
+		}
+        return collisions;
 	}
 
 	/**
@@ -810,7 +817,17 @@ export default class HW2Scene extends Scene {
 	 */
 	public static checkAABBtoCircleCollision(aabb: AABB, circle: Circle): boolean {
         // TODO implement collision detection for AABBs and Circles
-        return;
+		let dx = circle.center.x - aabb.center.x;
+		let dy = circle.center.y - aabb.center.y;
+		let cx = MathUtils.clamp(dx, -aabb.hw, aabb.hw);
+		let cy = MathUtils.clamp(dy, -aabb.hh, aabb.hh);
+		let nearestx = aabb.center.x + cx;
+		let nearesty = aabb.center.y + cy;
+		let diffx = circle.center.x - nearestx;
+		let diffy = circle.center.y - nearesty;
+		let diff = new Vec2(diffx, diffy);
+		let dist = diff.mag();
+        return dist < circle.radius;
 	}
 
     /** Methods for locking and wrapping nodes */
