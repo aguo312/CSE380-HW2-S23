@@ -739,7 +739,7 @@ export default class HW2Scene extends Scene {
 		let collisions = 0;
 		for (let bubble of this.bubbles) {
 			if (bubble.visible && HW2Scene.checkAABBtoCircleCollision(this.player.collisionShape.getBoundingRect(), bubble.collisionShape.getBoundingCircle())) {
-				// event
+				this.emitter.fireEvent(HW2Events.PLAYER_BUBBLE_COLLISION, {bubbleId: bubble.id});
 				collisions += 1;
 			}
 		}

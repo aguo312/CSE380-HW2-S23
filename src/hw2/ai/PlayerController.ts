@@ -65,8 +65,9 @@ export default class PlayerController implements AI {
 		this.laserTimer = new Timer(2500, this.handleLaserTimerEnd, false);
 		
 		this.receiver.subscribe(HW2Events.SHOOT_LASER);
-		this.receiver.subscribe(HW2Events.PLAYER_MINE_COLLISION)
-		this.receiver.subscribe(HW2Events.DEAD)
+		this.receiver.subscribe(HW2Events.PLAYER_MINE_COLLISION);
+		this.receiver.subscribe(HW2Events.PLAYER_BUBBLE_COLLISION);
+		this.receiver.subscribe(HW2Events.DEAD);
 
 		this.activate(options);
 	}
@@ -167,6 +168,10 @@ export default class PlayerController implements AI {
 				this.handlePlayerMineCollision(event);
 				break;
 			}
+			case HW2Events.PLAYER_BUBBLE_COLLISION: {
+				this.handlePlayerBubbleCollision(event);
+				break;
+			}
 			case HW2Events.DEAD: {
 				this.handleDead(event);
 				break;
@@ -199,6 +204,10 @@ export default class PlayerController implements AI {
 			this.invincible = true;
 			this.invincibleTimer.start();
 		}
+	}
+
+	protected handlePlayerBubbleCollision(event: GameEvent): void {
+		this.currentAir = this.currentAir + 1;
 	}
 
 	protected handleDead(event: GameEvent): void {
