@@ -67,6 +67,7 @@ export default class PlayerController implements AI {
 		this.receiver.subscribe(HW2Events.SHOOT_LASER);
 		this.receiver.subscribe(HW2Events.PLAYER_MINE_COLLISION);
 		this.receiver.subscribe(HW2Events.PLAYER_BUBBLE_COLLISION);
+		this.receiver.subscribe(HW2Events.PLAYER_SUFFOCATION);
 		this.receiver.subscribe(HW2Events.DEAD);
 
 		this.activate(options);
@@ -149,6 +150,10 @@ export default class PlayerController implements AI {
 
 		// If the player is out of air - start subtracting from the player's health
 		this.currentHealth = this.currentAir <= this.minAir ? MathUtils.clamp(this.currentHealth - deltaT*2, this.minHealth, this.maxHealth) : this.currentHealth;
+		if (this.currentAir <= this.minAir) {
+			this.emitter.fireEvent(HW2Events.PLAYER_SUFFOCATION);
+		}
+
 	}
 	/**
 	 * This method handles all events that the reciever for the PlayerController is
@@ -170,6 +175,10 @@ export default class PlayerController implements AI {
 			}
 			case HW2Events.PLAYER_BUBBLE_COLLISION: {
 				this.handlePlayerBubbleCollision(event);
+				break;
+			}
+			case HW2Events.PLAYER_SUFFOCATION: {
+				this.handlePlayerSuffocation(event);
 				break;
 			}
 			case HW2Events.DEAD: {
@@ -208,6 +217,11 @@ export default class PlayerController implements AI {
 
 	protected handlePlayerBubbleCollision(event: GameEvent): void {
 		this.currentAir = this.currentAir + 1;
+		this.owner.animation.playIfNotAlready(PlayerAnimations.IDLE, true);
+	}
+
+	protected handlePlayerSuffocation(event: GameEvent): void {
+		this.owner.animation.playIfNotAlready(PlayerAnimations.HIT, true);
 	}
 
 	protected handleDead(event: GameEvent): void {
@@ -216,7 +230,7 @@ export default class PlayerController implements AI {
 
 	protected handleInvincibleTimerEnd = () => {
 		this.invincible = false;
-		this.owner.animation.play(PlayerAnimations.IDLE, true);
+		this.owner.animation.playIfNotAlready(PlayerAnimations.IDLE, true);
 	}
 
 	/** 
