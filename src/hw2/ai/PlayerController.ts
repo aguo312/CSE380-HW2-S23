@@ -147,9 +147,12 @@ export default class PlayerController implements AI {
 
 		// Player looses a little bit of air each frame
 		this.currentAir = MathUtils.clamp(this.currentAir - deltaT, this.minAir, this.maxAir);
-
+		this.emitter.fireEvent(HW2Events.AIR_CHANGE, {curair: this.currentAir, maxair: this.maxAir})
+		
 		// If the player is out of air - start subtracting from the player's health
 		this.currentHealth = this.currentAir <= this.minAir ? MathUtils.clamp(this.currentHealth - deltaT*2, this.minHealth, this.maxHealth) : this.currentHealth;
+		this.emitter.fireEvent(HW2Events.HEALTH_CHANGE, {curhealth: this.currentHealth, maxhealth: this.maxHealth});
+		
 		if (this.currentAir <= this.minAir) {
 			this.emitter.fireEvent(HW2Events.PLAYER_SUFFOCATION);
 		}
@@ -208,7 +211,8 @@ export default class PlayerController implements AI {
 
 	protected handlePlayerMineCollision(event: GameEvent): void {
 		if (!this.invincible) {
-			this.currentHealth = this.currentHealth - 1;
+			this.currentHealth = MathUtils.clamp(this.currentHealth - 1, this.minHealth, this.maxHealth);
+			this.emitter.fireEvent(HW2Events.HEALTH_CHANGE, {curhealth: this.currentHealth, maxhealth: this.maxHealth});
 			this.owner.animation.playIfNotAlready(PlayerAnimations.HIT, false);
 			this.invincible = true;
 			this.invincibleTimer.start();
@@ -216,7 +220,8 @@ export default class PlayerController implements AI {
 	}
 
 	protected handlePlayerBubbleCollision(event: GameEvent): void {
-		this.currentAir = this.currentAir + 1;
+		this.currentAir = MathUtils.clamp(this.currentAir + 1, this.minAir, this.maxAir);
+		this.emitter.fireEvent(HW2Events.AIR_CHANGE, {curair: this.currentAir, maxair: this.maxAir})
 		this.owner.animation.playIfNotAlready(PlayerAnimations.IDLE, true);
 	}
 
