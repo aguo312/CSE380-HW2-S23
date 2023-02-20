@@ -197,6 +197,8 @@ export default class HW2Scene extends Scene {
 		// Handle screen despawning of mines and bubbles
 		for (let mine of this.mines) if (mine.visible) this.handleScreenDespawn(mine);
 		for (let bubble of this.bubbles) if (bubble.visible) this.handleScreenDespawn(bubble);
+
+		this.wrapPlayer(this.player, this.viewport.getCenter(), this.viewport.getHalfSize());
 	}
     /**
      * @see Scene.unloadScene()
@@ -912,6 +914,17 @@ export default class HW2Scene extends Scene {
 	 */
 	protected wrapPlayer(player: CanvasNode, viewportCenter: Vec2, viewportHalfSize: Vec2): void {
 		// TODO wrap the player around the top/bottom of the screen
+		let p = player.position;
+
+		let paddedViewportSize = viewportHalfSize.scaled(2).add(this.worldPadding);
+		let viewportSize = viewportHalfSize.scaled(2);
+
+		if (p.y < paddedViewportSize.y - viewportSize.y) {
+			player.position.set(p.x, viewportSize.y);
+		}
+		if (p.y > viewportSize.y) {
+			player.position.set(p.x, paddedViewportSize.y - viewportSize.y);
+		}
 	}
 
     /**
