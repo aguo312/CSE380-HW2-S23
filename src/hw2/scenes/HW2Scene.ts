@@ -511,7 +511,7 @@ export default class HW2Scene extends Scene {
 
 			mine.setAIActive(true, {});
 			// Start the mine spawn timer - spawn a mine every half a second I think
-			this.mineSpawnTimer.start(100);
+			this.mineSpawnTimer.start();
 
 		}
 	}
@@ -608,6 +608,16 @@ export default class HW2Scene extends Scene {
 	 */
 	public handleScreenDespawn(node: CanvasNode): void {
         // TODO - despawn the game nodes when they move out of the padded viewport
+		let x = node.position.x;
+		let y = node.position.y;
+		let paddedViewportSize = this.viewport.getHalfSize().scaled(2).add(this.worldPadding);
+		if (x < 0 || x > paddedViewportSize.x) {
+			node.visible = false;
+		}
+		if (y < 0 || y > paddedViewportSize.y) {
+			node.visible = false;
+		}
+
 	}
 
 	/** Methods for updating the UI */
