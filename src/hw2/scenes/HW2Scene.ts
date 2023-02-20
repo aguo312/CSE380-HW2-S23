@@ -228,7 +228,9 @@ export default class HW2Scene extends Scene {
 				break;
 			}
 			case HW2Events.DEAD: {
-				this.gameOverTimer.start();
+				if (!this.gameOverTimer.hasRun() && this.gameOverTimer.isStopped()) {
+					this.gameOverTimer.start();
+				}
 				break;
 			}
 			case HW2Events.CHARGE_CHANGE: {
@@ -614,10 +616,10 @@ export default class HW2Scene extends Scene {
 		let x = node.position.x;
 		let y = node.position.y;
 		let paddedViewportSize = this.viewport.getHalfSize().scaled(2).add(this.worldPadding);
-		if (x < 0 || x > paddedViewportSize.x) {
+		if (x < 0 - this.worldPadding.x || x > paddedViewportSize.x) {
 			node.visible = false;
 		}
-		if (y < 0 || y > paddedViewportSize.y) {
+		if (y < 0 - this.worldPadding.y || y > paddedViewportSize.y) {
 			node.visible = false;
 		}
 
