@@ -500,7 +500,6 @@ export default class HW2Scene extends Scene {
 			mine.visible = true;
 
 			// Extract the size of the viewport
-			let troll = this.viewport.getHalfSize();
 			let paddedViewportSize = this.viewport.getHalfSize().scaled(2).add(this.worldPadding);
 			let viewportSize = this.viewport.getHalfSize().scaled(2);
 
