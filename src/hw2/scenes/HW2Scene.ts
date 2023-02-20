@@ -500,6 +500,7 @@ export default class HW2Scene extends Scene {
 			mine.visible = true;
 
 			// Extract the size of the viewport
+			let troll = this.viewport.getHalfSize();
 			let paddedViewportSize = this.viewport.getHalfSize().scaled(2).add(this.worldPadding);
 			let viewportSize = this.viewport.getHalfSize().scaled(2);
 
@@ -554,10 +555,9 @@ export default class HW2Scene extends Scene {
 			bubble.visible = true;
 
 			let paddedViewportSize = this.viewport.getHalfSize().scaled(2).add(this.worldPadding);
-			let beginView = this.viewport.getOrigin();
 			let viewportSize = this.viewport.getHalfSize().scaled(2);
 			
-			bubble.position.copy(RandUtils.randVec(beginView.x, viewportSize.x, paddedViewportSize.y, viewportSize.y));
+			bubble.position.copy(RandUtils.randVec(paddedViewportSize.x - viewportSize.x, viewportSize.x, viewportSize.y, paddedViewportSize.y));
 
 			bubble.setAIActive(true, {});
 			this.bubbleSpawnTimer.start();
