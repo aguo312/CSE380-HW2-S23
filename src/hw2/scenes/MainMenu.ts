@@ -102,7 +102,7 @@ export default class MainMenu extends Scene {
         const aboutHeader = <Label>this.add.uiElement(UIElementType.LABEL, MainMenuLayer.ABOUT, {position: new Vec2(center.x, center.y - 250), text: "About"});
         aboutHeader.textColor = Color.WHITE;
 
-        const text1 = "This game was made by <YOUR NAME HERE>, Peter Walsh and Richard McKenna";
+        const text1 = "This game was made by Andrew Guo, Peter Walsh and Richard McKenna";
         const text2 = "using the Wolfie2D game engine, a TypeScript game engine created by";
         const text3 = "Joe Weaver and Richard McKenna.";
 
@@ -159,11 +159,19 @@ export default class MainMenu extends Scene {
             }
             case MainMenuEvent.PLAY_RECORDING: {
                 // TODO play the recording here
+                // HW2Scene.recorder.replayer().start(HW2Scene.recorder);
+                // Homework1_Scene.recorder.replayer().start(Homework1_Scene.recorder);
+                // this.emitter.fireEvent(GameEventType.STOP_RECORDING);
+                this.emitter.fireEvent(GameEventType.PLAY_RECORDING, {onEnd: this.handleRecordingEnd});
                 break;
             }
             default: {
                 throw new Error(`Unhandled event caught in MainMenu: "${event.type}"`);
             }
         }
+    }
+
+    protected handleRecordingEnd = () => {
+        this.sceneManager.changeToScene(MainMenu, {});
     }
 }

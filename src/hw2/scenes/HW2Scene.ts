@@ -108,6 +108,8 @@ export default class HW2Scene extends Scene {
 	// The padding of the world
 	private worldPadding: Vec2;
 
+	private recorder: BasicRecording;
+
 	/** Scene lifecycle methods */
 
 	/**
@@ -161,6 +163,11 @@ export default class HW2Scene extends Scene {
 		this.initUI();
 		// Initialize object pools
 		this.initObjectPools();
+
+		if (this.recording) {
+			this.recorder = new BasicRecording(HW2Scene, { seed: this.seed });
+			this.emitter.fireEvent(GameEventType.START_RECORDING, { recording: this.recorder });
+		}
 
 		// Subscribe to player events
 		this.receiver.subscribe(HW2Events.CHARGE_CHANGE);
@@ -993,6 +1000,7 @@ export default class HW2Scene extends Scene {
 		}
 		// If the game-over timer has run, change to the game-over scene
 		if (this.gameOverTimer.hasRun() && this.gameOverTimer.isStopped()) {
+			this.emitter.fireEvent(GameEventType.STOP_RECORDING);
 		 	this.sceneManager.changeToScene(GameOver, {
 				bubblesPopped: this.bubblesPopped, 
 				minesDestroyed: this.minesDestroyed,
