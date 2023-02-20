@@ -199,6 +199,7 @@ export default class HW2Scene extends Scene {
 		for (let bubble of this.bubbles) if (bubble.visible) this.handleScreenDespawn(bubble);
 
 		this.wrapPlayer(this.player, this.viewport.getCenter(), this.viewport.getHalfSize());
+		this.lockPlayer(this.player, this.viewport.getCenter(), this.viewport.getHalfSize());
 	}
     /**
      * @see Scene.unloadScene()
@@ -916,14 +917,13 @@ export default class HW2Scene extends Scene {
 		// TODO wrap the player around the top/bottom of the screen
 		let p = player.position;
 
-		let paddedViewportSize = viewportHalfSize.scaled(2).add(this.worldPadding);
 		let viewportSize = viewportHalfSize.scaled(2);
 
-		if (p.y < paddedViewportSize.y - viewportSize.y) {
+		if (p.y < 0) {
 			player.position.set(p.x, viewportSize.y);
 		}
 		if (p.y > viewportSize.y) {
-			player.position.set(p.x, paddedViewportSize.y - viewportSize.y);
+			player.position.set(p.x, 0);
 		}
 	}
 
@@ -968,6 +968,16 @@ export default class HW2Scene extends Scene {
 	 */
 	protected lockPlayer(player: CanvasNode, viewportCenter: Vec2, viewportHalfSize: Vec2): void {
 		// TODO prevent the player from moving off the left/right side of the screen
+		let p = player.position;
+
+		let viewportSize = viewportHalfSize.scaled(2);
+
+		if (p.x < this.worldPadding.x) {
+			player.position.set(this.worldPadding.x, p.y);
+		}
+		if (p.x > viewportSize.x - this.worldPadding.x) {
+			player.position.set(viewportSize.x - this.worldPadding.x, p.y);
+		}
 	}
 
 	public handleTimers(): void {
