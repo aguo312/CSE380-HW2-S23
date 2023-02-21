@@ -159,9 +159,6 @@ export default class MainMenu extends Scene {
             }
             case MainMenuEvent.PLAY_RECORDING: {
                 // TODO play the recording here
-                // HW2Scene.recorder.replayer().start(HW2Scene.recorder);
-                // Homework1_Scene.recorder.replayer().start(Homework1_Scene.recorder);
-                // this.emitter.fireEvent(GameEventType.STOP_RECORDING);
                 this.emitter.fireEvent(GameEventType.PLAY_RECORDING, {onEnd: this.handleRecordingEnd});
                 break;
             }

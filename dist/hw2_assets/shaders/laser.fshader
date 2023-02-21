@@ -51,7 +51,7 @@ void main(){
 
 // TODO Get the laser to look like a sinwave
 float sinwave_laser(vec4 position) {
-    return 1.0;
+	return 1.0;
 }
 
 float linear_laser(vec4 position) {
